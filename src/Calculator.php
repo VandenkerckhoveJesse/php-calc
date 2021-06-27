@@ -23,5 +23,9 @@ class Calculator
         return $ground;
     }
 
+    public static function SquareRoot(int $x) {
+        return $x;
+    }
+
 
 }
