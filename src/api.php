@@ -39,7 +39,7 @@ function evalRequest() {
             $b = $_GET["b"];
             return $calculator->Power($a, $b);
         case SQUARE_ROOT_REQUEST_NAME:
-            $a = $_GET["a"];
+            $a = $_GET["b"];
             return $calculator->SquareRoot($a);
         default:
             returnBadRequest();

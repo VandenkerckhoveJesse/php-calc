@@ -25,4 +25,9 @@ class DivideCalculatorTest extends TestCase
         $this->assertEquals(2,
             $calculator->Divide(1, 0.5));
     }
+    public function testDivideByZero():void {
+        $calculator = new Calculator();
+        $this->expectException(
+            $calculator->Divide(5, 0));
+    }
 }
