@@ -16,7 +16,7 @@ class PowerCalculatorTest extends TestCase
     }
     public function testPowerFloatNumbers():void {
         $calculator = new Calculator();
-        $this->assertEquals(2,
-            $calculator->Power(4, 0.5));
+        $this->expectException("Exception");
+        $calculator->Power(5, 0.5);
     }
 }

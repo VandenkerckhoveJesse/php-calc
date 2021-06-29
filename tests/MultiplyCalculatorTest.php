@@ -16,7 +16,7 @@ class MultiplyCalculatorTest extends TestCase
     }
     public function testMultiplyTwoNegativeNumbers():void {
         $calculator = new Calculator();
-        $this->assertEquals(20,
+        $this->assertEquals(100,
             $calculator->Multiply(-10, -10));
     }
     public function testMultiplyFloatNumbers():void {
