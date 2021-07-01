@@ -6,7 +6,7 @@ const apiActionNames = {
     "^":"power",
     "V":"square"
 };
-let result = 0;
+let result = "0";
 let action = null;
 let previous = null;
 setResult();
@@ -43,10 +43,10 @@ function buttonClick(content) {
         case "+":
             if(previous === null) {
                 previous = result;
-                result = 0;
+                result = "0";
             } else {
                 previous = getResult();
-                result = 0;
+                result = "0";
             }
             action = '+';
             setResultAndSubscript();
@@ -54,10 +54,10 @@ function buttonClick(content) {
         case "-":
             if(previous === null) {
                 previous = result;
-                result = 0;
+                result = "0";
             }else {
                 previous = getResult();
-                result = 0;
+                result = "0";
             }
             action = '-';
             setResultAndSubscript();
@@ -65,10 +65,10 @@ function buttonClick(content) {
         case '*':
             if(previous === null) {
                 previous = result;
-                result = 0;
+                result = "0";
             }else {
                 previous = getResult();
-                result = 0;
+                result = "0";
             }
             action = '*';
             setResultAndSubscript();
@@ -76,10 +76,10 @@ function buttonClick(content) {
         case "/":
             if(previous === null) {
                 previous = result;
-                result = 0;
+                result = "0";
             } else {
                 previous = getResult();
-                result = 0;
+                result = "0";
             }
             action = '/';
             setResultAndSubscript();
@@ -87,10 +87,10 @@ function buttonClick(content) {
         case "^":
             if(previous === null) {
                 previous = result;
-                result = 0;
+                result = "0";
             }else {
                 previous = getResult();
-                result = 0;
+                result = "0";
             }
             action = '^';
             setResultAndSubscript();
@@ -101,14 +101,14 @@ function buttonClick(content) {
             setResult();
             break;
         case "Undo":
-            if(result === 0 && previous !== null)
+            if(result === "0" && previous !== null)
             {
                 result = previous;
                 previous = null;
                 action = null;
                 setResultAndSubscript();
-            } else if  (result > 0) {
-                result = Math.floor(result / 10);
+            } else if  (result !== "0") {
+                result = result.slice(0, -1);
                 setResult();
             }
             break;
@@ -117,9 +117,8 @@ function buttonClick(content) {
             setResult();
             break;
         default:
-            let number = parseInt(content);
-            result *= 10;
-            result += number;
+            if(result === "0") result = content;
+            else result += content;
             setResult();
             break;
     }
@@ -132,13 +131,14 @@ function getResult() {
     let params = `function=${paramAction}&a=${previous}&b=${result}`;
     request.open("GET", url+"?"+params, false);
     request.send( null );
+    console.log(request.response);
     let response = JSON.parse(request.response);
     if(response["error"] !== "") {
         setErrorAs(response["error"]);
         return 0;
     }
     else {
-        return response["result"];
+        return response["result"].toString();
     }
 }
 
