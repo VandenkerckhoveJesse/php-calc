@@ -49,30 +49,28 @@ class Calculator
         $end = $x;
         $precision = 5;
         $result = null;
-        while ($start <= $end) {
+        while ($start <= $end) { //The loop for integers
             $mid = ($start + $end)/2;
-            if($mid * $mid == $x) {
+            $multiplication = $mid * $mid;
+            if($multiplication == $x) { //We have found the perfect result.
                 $result = $mid;
                 return $result;
             }
-            if($mid * $mid < $x) {
+            if($multiplication < $x) {  // The answer lives on the left of the current mid
                 $start = $mid + 1;
                 $result = $mid;
             }
-            else {
+            else { //The answer lives on the right of the current answer
                 $end = $mid -1;
             }
         }
         $increment = 0.1;
-        for ($i = 0; $i < $precision; $i++)
+        for ($i = 0; $i < $precision; $i++) //Loop for precision after the decimal point.
         {
             while ($result * $result <= $x)
             {
                 $result += $increment;
             }
-
-            // loop terminates when
-            // ans * ans > number
             $result = $result - $increment;
             $increment = $increment / 10;
         }

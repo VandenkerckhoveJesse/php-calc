@@ -7,6 +7,7 @@ table {
   border-collapse: collapse;
   width: 400px;
   height: 500px;
+  position: relative;
   background-color: #b1c5d4;
   table-layout: fixed;
   margin-left: auto;
@@ -57,5 +58,12 @@ table, th, td {
 
 .hint:hover {
   background-color: #eecbba; }
+
+#error {
+  position: absolute;
+  color: #ae3f39;
+  top: 10px;
+  font-size: 15px;
+  font-weight: normal; }
 
 /*# sourceMappingURL=style.css.map */

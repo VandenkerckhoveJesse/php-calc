@@ -8,9 +8,10 @@
 <body>
 <h1>Calculator!</h1>
 <h2>Made by Jesse Vandenkerckhove</h2>
+<p>This is a DEMO! Javascript (the front-end) does not work good with large numbers so do not use this for everyday use!</p>
 <table>
 
-    <tr><td colspan="4" class="result"><sub>+2</sub><p>Result</p></td></tr>
+    <tr><td colspan="4" class="result"><sub>+2</sub><p>Result</p><p id="error"></p></td></tr>
     <tr>
         <td onclick="buttonClick('V')" class="button">V</td>
         <td onclick="buttonClick('^')" class="button">^</td>
@@ -36,7 +37,7 @@
         <td onclick="buttonClick('+')" class="button">+</td>
     </tr>
     <tr>
-        <td class="secondary"></td>
+        <td onclick="buttonClick('+/-')" class="button">+/-</td>
         <td onclick="buttonClick('0')" class="button">0</td>
         <td class="secondary"></td>
         <td onclick="buttonClick('=')" class="button hint">=</td>

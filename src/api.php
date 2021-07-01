@@ -65,4 +65,5 @@ function returnAsJson($result) {
 function returnBadRequest($message) {
     header("HTTP/1.1 400 Bad Request");
     echo json_encode(array("result"=>"", "error"=>$message));
+    exit; // The program has to stop when a error has occured or else return as json will also run.
 }

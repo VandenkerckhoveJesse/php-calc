@@ -24,6 +24,9 @@ function setSubscript() {
     let previousString = !previous ? "":previous;
     document.querySelector(".result sub").innerHTML = previousString + " " + actionString;
 }
+function setErrorAs(error) {
+    document.querySelector("#error").innerHTML = error;
+}
 function resetSubscript() {
     action = null;
     previous = null;
@@ -95,6 +98,7 @@ function buttonClick(content) {
         case "V":
             action = 'V';
             result = getResult();
+            setResult();
             break;
         case "Undo":
             if(result === 0 && previous !== null)
@@ -107,6 +111,10 @@ function buttonClick(content) {
                 result = Math.floor(result / 10);
                 setResult();
             }
+            break;
+        case "+/-":
+            result = -result;
+            setResult();
             break;
         default:
             let number = parseInt(content);
@@ -122,10 +130,16 @@ function getResult() {
     let url = "api.php";
     let paramAction = decodeAction(action);
     let params = `function=${paramAction}&a=${previous}&b=${result}`;
-    console.log(url+"?"+params);
     request.open("GET", url+"?"+params, false);
     request.send( null );
-    return request.responseText;
+    let response = JSON.parse(request.response);
+    if(response["error"] !== "") {
+        setErrorAs(response["error"]);
+        return 0;
+    }
+    else {
+        return response["result"];
+    }
 }
 
 function decodeAction(action) {

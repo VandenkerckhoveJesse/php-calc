@@ -16,6 +16,7 @@ table {
   border-collapse: collapse;
   width: 400px;
   height: 500px;
+  position: relative;
   background-color: $Primary;
   table-layout: fixed;
   margin-left: auto;
@@ -73,5 +74,13 @@ table, th, td {
 
 .hint:hover{
   background-color: $Hint-Darker;
+}
+
+#error {
+  position: absolute;
+  color: #ae3f39;
+  top: 10px;
+  font-size: 15px;
+  font-weight: normal;
 }
 
