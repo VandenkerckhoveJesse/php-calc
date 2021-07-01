@@ -30,10 +30,14 @@ class Calculator
         }
     }
     private static function PositivePower(float $ground, float $exp):float {
-        return $ground;
+        $result = 1;
+        for ($i = 0; $i < $exp; $i++) {
+            $result *= $ground;
+        }
+        return $result;
     }
     private static function NegativePower(float $ground, float $exp):float {
-        return $ground;
+        return 1/self::PositivePower($ground, -$exp);
     }
 
     public static function SquareRoot(int $x) {
