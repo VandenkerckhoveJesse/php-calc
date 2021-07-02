@@ -11,7 +11,7 @@ require "Calculator.php";
 if ($_SERVER['REQUEST_METHOD']  === 'GET') {
     try {
         $result = evalRequest();
-        if ($result > CALCULATOR_MAXIMUM_SIZE) throw new Exception("Result number is to big!");
+        if (isOutOfBounds($result)) throw new Exception("Result number is out of bounds (to big)!");
     } catch (Exception $e) {
         returnBadRequest($e->getMessage());
     }
@@ -25,7 +25,7 @@ function evalRequest() {
     $calculator = new Calculator();
     $a = $_GET["a"];
     $b = $_GET["b"];
-    if($a > CALCULATOR_MAXIMUM_SIZE || $b > CALCULATOR_MAXIMUM_SIZE) throw new Exception("One of the input numbers is to big!");
+    if(isOutOfBounds($a) || isOutOfBounds($b)) throw new Exception("One of the input numbers is out of bounds (to big)!");
     switch ($function) {
         case ADD_REQUEST_NAME:
             return $calculator->Add($a, $b);
@@ -64,4 +64,9 @@ function returnBadRequest($message) {
     header("HTTP/1.1 400 Bad Request");
     echo json_encode(array("result"=>"", "error"=>$message));
     exit; // The program has to stop when a error has occured or else return as json will also run.
+}
+
+function isOutOfBounds($number) {
+    return ($number > CALCULATOR_MAXIMUM_SIZE
+    ||      $number < -CALCULATOR_MAXIMUM_SIZE);
 }

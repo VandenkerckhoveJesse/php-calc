@@ -9,96 +9,49 @@ const apiActionNames = {
 let result = "0";
 let action = null;
 let previous = null;
-setResult();
-setSubscript();
+let sign = "";
+let error = "";
+display();
 
-function setResultAndSubscript() {
-    setResult();
-    setSubscript();
-}
-function setResult() {
-    document.querySelector(".result p").innerHTML = result;
-}
-function setSubscript() {
+function display() {
     let actionString = !action ? "":action;
     let previousString = !previous ? "":previous;
     document.querySelector(".result sub").innerHTML = previousString + " " + actionString;
-}
-function setErrorAs(error) {
+    document.querySelector(".result p").innerHTML = sign + result;
     document.querySelector("#error").innerHTML = error;
 }
-function resetSubscript() {
-    action = null;
-    previous = null;
-}
+
 function buttonClick(content) {
     switch (content) {
-        case "=":
-            if(previous && action) {
-                result = getResult();
-                resetSubscript();
-                setResultAndSubscript();
-            }
-            break;
         case "+":
-            if(previous === null) {
-                previous = result;
-                result = "0";
-            } else {
-                previous = getResult();
-                result = "0";
-            }
-            action = '+';
-            setResultAndSubscript();
-            break;
         case "-":
-            if(previous === null) {
-                previous = result;
-                result = "0";
-            }else {
-                previous = getResult();
-                result = "0";
-            }
-            action = '-';
-            setResultAndSubscript();
-            break;
         case '*':
-            if(previous === null) {
-                previous = result;
-                result = "0";
-            }else {
-                previous = getResult();
-                result = "0";
-            }
-            action = '*';
-            setResultAndSubscript();
-            break;
         case "/":
-            if(previous === null) {
-                previous = result;
-                result = "0";
-            } else {
-                previous = getResult();
-                result = "0";
-            }
-            action = '/';
-            setResultAndSubscript();
-            break;
         case "^":
             if(previous === null) {
                 previous = result;
                 result = "0";
-            }else {
-                previous = getResult();
+                sign = "";
+            } else {
+                let calculated = calculateResult();
+                previous = calculated.result;
+                sign = calculated.sign;
                 result = "0";
             }
-            action = '^';
-            setResultAndSubscript();
+            action = content;
+            display();
+            break;
+        case "=":
+            if(previous && action) {
+                setResultAndSign(calculateResult());
+                resetSubscript();
+                display();
+            }
             break;
         case "V":
             action = 'V';
-            result = getResult();
-            setResult();
+            setResultAndSign(calculateResult());
+            display();
             break;
         case "Undo":
             if(result === "0" && previous !== null)
@@ -106,37 +59,62 @@ function buttonClick(content) {
                 result = previous;
                 previous = null;
                 action = null;
-                setResultAndSubscript();
             } else if  (result !== "0") {
                 result = result.slice(0, -1);
-                setResult();
             }
+            if(result === "") result = "0";
+            display();
             break;
         case "+/-":
-            result = -result;
-            setResult();
+            if(sign === "-") sign = "";
+            else sign = "-";
+            display();
             break;
         default:
             if(result === "0") result = content;
             else result += content;
-            setResult();
+            display();
             break;
     }
 }
 
-function getResult() {
+
+function calculateResult() {
+    try {
+        return getResultAndSign(sendRequestToAPI(action, result, previous));
+    } catch (e) {
+        error = e;
+        display();
+    }
+
+}
+
+
+
+function setResultAndSign(object) {
+    result = object.result;
+    sign = object.sign;
+}
+function resetSubscript() {
+    action = null;
+    previous = null;
+}
+
+function getResultAndSign(response) {
+    let parsed = parseInt(response);
+    if (parsed > 0) return {sign: "", result: response};
+    else return {sign: "-", result: -parsed.toString()}
+}
+
+function sendRequestToAPI(action, result, previous) {
     let request = new XMLHttpRequest();
     let url = "api.php";
     let paramAction = decodeAction(action);
     let params = `function=${paramAction}&a=${previous}&b=${result}`;
     request.open("GET", url+"?"+params, false);
     request.send( null );
-    console.log(request.response);
     let response = JSON.parse(request.response);
-    if(response["error"] !== "") {
-        setErrorAs(response["error"]);
-        return 0;
-    }
+    if(response["error"] !== "") throw response["error"];
     else {
         return response["result"].toString();
     }
